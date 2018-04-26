@@ -5,6 +5,8 @@ import com.chengym.home.Service.UserService;
 import com.chengym.home.utils.Constant;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.ibatis.annotations.Param;
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,8 +19,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping(value = "/user")
 public class UserController {
-//    @Autowired
-//    Logger logger = LoggerFactory.getLogger(UserController.class);
+    private Logger logger = LoggerFactory.getLogger(UserController.class);
 
     @Autowired
     private UserService userService;
@@ -39,10 +40,8 @@ public class UserController {
     @RequestMapping(value = "/getcode")
     public Object getCode(@Param("resCode") String resCode,@Param("encryptedData")String encryptedData, @Param("iv")String iv){
         String responseCode = RandomStringUtils.random(20,resCode+ Constant.ALL_NUM+Constant.ALL_LETTER);
-//        logger.info("resCode:"+ resCode+"; encrypteData:"+encryptedData+"; iv:"+iv);
-        System.out.println("##############################");
-        System.out.println("resCode:"+ resCode+"; encrypteData:"+encryptedData+"; iv:"+iv);
-        System.out.println("##############################");
+        logger.info("resCode:"+ resCode+"; encrypteData:"+encryptedData+"; iv:"+iv);
+        userService.getUserOpenid(resCode);
         return responseCode;
     }
 }
