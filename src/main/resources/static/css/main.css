@@ -1,0 +1,38 @@
+.all-screen {
+    text-align: center;
+    border: solid 0px;
+}
+
+.img-allscreen {
+    height: 642px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+body {
+    background-color: #ddd5c9;
+}
+.div-for-phone {
+    text-align: center;
+}
+.all-screen img {
+    width:80%;
+    margin: 0 auto;
+}
+.div-for-phone img {
+    width:100%;
+    margin: 0 auto;
+}
+
+@media screen and (max-device-width: 480px) {
+
+    #div-for-computer {
+        display:none;
+    }
+}
+@media screen and (min-device-width: 480px) {
+
+    #div-for-phone {
+        display:none;
+    }
+}

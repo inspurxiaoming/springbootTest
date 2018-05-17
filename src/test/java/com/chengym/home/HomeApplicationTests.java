@@ -11,11 +11,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 @SpringBootTest
 public class HomeApplicationTests {
 
-	@Autowired
-	UserService users;
 	@Test
 	public void contextLoads() {
-		users.getUserOpenid("081Z6XuU1FruBV082huU16xBuU1Z6XuO");
+		String asd = "sdajhvgsagh jdsaj";
+		asd.replaceAll(" ","\\+");
+		System.out.println("asd");
 	}
 
 }

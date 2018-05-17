@@ -4,16 +4,20 @@ import com.chengym.home.Bean.User;
 import com.chengym.home.Dao.UserMapper;
 import com.chengym.home.Service.UserService;
 import com.chengym.home.utils.HttpRequest;
+import com.chengym.home.utils.ResponseBean;
+import com.chengym.home.utils.encryptrd.AesCbcUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pagehelper.PageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +51,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.selectAllUser();
     }
     @Override
-    public boolean getUserOpenid(String code){
+    public String getUserOpenidAndsessionKey(String code){
         String url = "https://api.weixin.qq.com/sns/jscode2session";
         String appid = "wx8c0e94d2e3a3d4d4";
         String secret = "10f8d287ee2c99c4b07b03b266515a36";
@@ -60,9 +64,67 @@ public class UserServiceImpl implements UserService {
         postParameters.put("grant_type", grantType);
         String param = "appid="+appid+"&secret="+secret+"&js_code="+code+"&grant_type=authorization_code";
 //        String responseEntity =  restTemplate.getForObject(url,String.class,postParameters);
-        String result = HttpRequest.sendGet(url,param);
+        String result = "";
+        try{
+            result = HttpRequest.sendGet(url,param);
+        } catch (Exception e){
+            log.error(e.toString());
+        }
         log.info(result);
-        return true;
+        return result;
+    }
+
+    @Override
+    public ResponseBean checkUserInfo(String userOpenidAndsessionKey, String encryptedData, String iv) throws Exception {
+        ResponseBean responseBean = new ResponseBean();
+        Map<String,String> map = (new ObjectMapper()).readValue(userOpenidAndsessionKey,Map.class);
+        String decodeEncryptedData = decode(encryptedData);
+        String userInfo = null;
+        String userOpenId = map.get("openid");
+        String sessionKey = map.get("session_key");
+        decodeEncryptedData = decodeEncryptedData.replaceAll(" ","\\+");
+        userInfo = AesCbcUtil.decrypt(decodeEncryptedData, sessionKey, iv, "UTF-8");
+        if(StringUtils.isNotEmpty(userInfo)){
+            if(map!= null) {
+                Map<String,String> userInfoMap =  (new ObjectMapper()).readValue(userInfo,Map.class);
+                User user = getUserById(userOpenId);
+                if (user == null) {
+                    user = new User();
+                    user.setId(userOpenId);
+                    user.setName(userInfoMap.get("nickName"));
+                    addUser(user);
+                }else{
+                    user.setName(userInfoMap.get("nickName"));
+                    this.updateByPrimaryKeySelective(user);
+                }
+                responseBean.setResult(user);
+                responseBean.setCode(HttpStatus.OK.toString());
+                responseBean.setSuccess(true);
+            }else{
+                responseBean.setSuccess(false);
+            }
+        }
+        return responseBean;
+    }
+    public String decode(String url){
+        try {
+            String prevURL="";
+            String decodeURL=url;
+            while(!prevURL.equals(decodeURL))
+            {
+                prevURL=decodeURL;
+                decodeURL= URLDecoder.decode( decodeURL, "UTF-8" );
+            }
+            return decodeURL;
+        } catch (UnsupportedEncodingException e) {
+            return "Issue while decoding" +e.getMessage();
+        }
+    }
+    public User getUserById(String Id){
+        return userMapper.selectUserById(Id);
+    }
+    public int updateByPrimaryKeySelective(User user){
+        return userMapper.updateByPrimaryKeySelective(user);
     }
 }
 

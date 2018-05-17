@@ -5,7 +5,7 @@ import com.chengym.home.Bean.User;
 import java.util.List;
 
 public interface UserMapper {
-    int deleteByPrimaryKey(Long id);
+    int deleteByPrimaryKey(String id);
 
     int insert(User record);
 
@@ -18,4 +18,6 @@ public interface UserMapper {
     int updateByPrimaryKeySelective(User record);
 
     int updateByPrimaryKey(User record);
+
+    User selectUserById(String id);
 }

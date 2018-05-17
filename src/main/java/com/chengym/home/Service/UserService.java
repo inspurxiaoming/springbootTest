@@ -1,6 +1,7 @@
 package com.chengym.home.Service;
 
 import com.chengym.home.Bean.User;
+import com.chengym.home.utils.ResponseBean;
 
 import java.util.List;
 
@@ -13,5 +14,7 @@ public interface UserService {
 
     List<User> findAllUser(int pageNum, int pageSize);
 
-    boolean getUserOpenid(String code);
+    String getUserOpenidAndsessionKey(String code);
+
+    ResponseBean checkUserInfo(String userOpenidAndsessionKey, String encryptedData, String iv) throws Exception;
 }
