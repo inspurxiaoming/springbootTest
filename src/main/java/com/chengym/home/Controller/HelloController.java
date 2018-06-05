@@ -12,6 +12,8 @@ public class HelloController {
     public String index(){
         return "hello";
     }
+
+
     @RequestMapping(value = "/video")
     public String video(){
         return "video";

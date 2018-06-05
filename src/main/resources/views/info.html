@@ -1,0 +1,21 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>程永明的小站</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>程永明的小站</title>
+    <link th:href="@{~/css/main.css}" rel="stylesheet" type="text/css"></link>
+</head>
+<body>
+<!--/*@thymesVar id="name" type="java.lang.String"*/-->
+<div>
+    <form action="#" th:action="@{/info/add}" th:object="${message}" method="post">
+        <input type="text" name="id"  />
+        <input type="text" name="name" />
+        <input type="text" name="phone" />
+        <input type="text" name="major" />
+        <input type="submit" />
+    </form>
+</div>
+</body>
+</html>
