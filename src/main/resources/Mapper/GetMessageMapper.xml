@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.chengym.home.Dao.GetMessageMapper" >
+    <resultMap id="BaseResultMap" type="com.chengym.home.Bean.Message" >
+        <id column="id" property="id" />
+        <result column="userid" property="userid" />
+        <result column="name" property="name"  />
+        <result column="phone" property="phone" />
+        <result column="sex" property="sex" />
+        <result column="workunit" property="workUnit" />
+        <result column="grade" property="grade" />
+        <result column="major" property="major" />
+        <result column="note" property="note" />
+    </resultMap>
+  <select id="getListForPage" resultMap="BaseResultMap" >
+    select *  from alumnus
+  </select>
+</mapper>

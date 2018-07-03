@@ -3,6 +3,8 @@ package com.chengym.home.Bean;
 public class Message {
     private String id;
 
+    private String userid;
+
     private String name;
 
     private String password;
@@ -16,6 +18,16 @@ public class Message {
     private String grade;//入学年份 49 年开始下拉框
 
     private String workUnit;//工作单位
+
+    private String note;//备注
+
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getId() {
         return id;
@@ -79,5 +91,13 @@ public class Message {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 }

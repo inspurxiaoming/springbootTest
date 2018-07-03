@@ -4,7 +4,7 @@ server:
 
 spring:
     redis:
-        host: 192.168.153.188
+        host: 192.168.153.192
 #        host: 127.0.0.1
         port: 6379
         database: 0
